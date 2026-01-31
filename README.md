@@ -90,7 +90,7 @@ The `docker-compose.yaml` mounts `src/` and `config/` for hot-reload during deve
 | Variable | Description | Default |
 |---|---|---|
 | `OPENROUTER_API_KEY` | OpenRouter API key (required) | — |
-| `OPENROUTER_MODEL` | Model for moderation | `meta-llama/llama-3.1-8b-instruct` |
+| `OPENROUTER_MODEL` | Model for moderation (required) | — |
 | `OPENROUTER_BASE_URL` | OpenRouter API base URL | `https://openrouter.ai/api/v1` |
 | `LANGSMITH_API_KEY` | LangSmith tracing key (optional) | — |
 | `LANGSMITH_PROJECT` | LangSmith project name | `cauldron` |

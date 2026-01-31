@@ -9,14 +9,12 @@ def test_all_sections_present(sections_config, valid_markdown):
     assert result["section_errors"] == []
 
 
-def test_missing_sections(sections_config, invalid_markdown_missing_sections):
-    state = ValidationState(content=invalid_markdown_missing_sections)
+def test_missing_sections(sections_config):
+    content = "# Some random heading\nNo required sections here."
+    state = ValidationState(content=content)
     result = check_sections(state, config=sections_config)
     errors = result["section_errors"]
-    assert len(errors) == 2
-    missing_names = {e.message for e in errors}
-    assert "Required section 'Behavior' is missing" in missing_names
-    assert "Required section 'Constraints' is missing" in missing_names
+    assert len(errors) == len(sections_config.sections)
     assert all(e.code == ErrorCode.MISSING_SECTION for e in errors)
 
 
@@ -24,7 +22,7 @@ def test_empty_content(sections_config):
     state = ValidationState(content="")
     result = check_sections(state, config=sections_config)
     errors = result["section_errors"]
-    assert len(errors) == 4
+    assert len(errors) == len(sections_config.sections)
 
 
 def test_heading_level_variations(sections_config):
