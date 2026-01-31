@@ -37,3 +37,8 @@ uv.lock
 # secrets and environment variables
 .env
 .env.local
+
+# Misc
+todo.md
+next.md
+docs/

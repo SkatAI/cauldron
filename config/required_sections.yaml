@@ -5,9 +5,3 @@ sections:
   - name: Tone
     heading_pattern: "^#{1,3}\\s+Tone"
     required: true
-  - name: Behavior
-    heading_pattern: "^#{1,3}\\s+Behavior"
-    required: true
-  - name: Constraints
-    heading_pattern: "^#{1,3}\\s+Constraints"
-    required: true

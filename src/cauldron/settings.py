@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     openrouter_model: str = "meta-llama/llama-3.1-8b-instruct"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
 
+    langsmith_tracing: bool = False
+    langsmith_endpoint: str = "https://api.smith.langchain.com"
     langsmith_api_key: str = ""
     langsmith_project: str = "cauldron"
 
