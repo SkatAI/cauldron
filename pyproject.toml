@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cauldron"
+version = "0.1.0"
+description = "AI agent service for validating AI persona system prompts"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.10",
+    "pydantic-settings>=2.7",
+    "langchain-core>=0.3",
+    "langchain-openai>=0.3",
+    "langgraph>=0.2",
+    "langsmith>=0.2",
+    "pyyaml>=6.0",
+    "httpx>=0.28",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.25",
+    "pytest-cov>=6.0",
+    "ruff>=0.9",
+    "mypy>=1.14",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cauldron"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "integration: marks tests as integration tests",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["langchain_core.*", "langchain_openai.*", "langgraph.*", "langsmith.*"]
+ignore_missing_imports = true
