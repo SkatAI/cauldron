@@ -2,10 +2,10 @@ services:
   cauldron:
     build: .
     ports:
-      - "8000:8000"
+      - "8088:8088"
     env_file:
       - .env.local
     volumes:
       - ./src:/app/src
       - ./config:/app/config
-    command: uvicorn cauldron.main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn cauldron.main:app --reload --host 0.0.0.0 --port 8088

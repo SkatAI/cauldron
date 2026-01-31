@@ -33,21 +33,21 @@ cp .env.example .env.local
 make run
 ```
 
-The API starts on `http://localhost:8000`.
+The API starts on `http://localhost:8088`.
 
 ### API endpoints
 
 **Health check**
 
 ```bash
-curl http://localhost:8000/health
+curl http://localhost:8088/health
 # {"status": "ok"}
 ```
 
 **Validate a system prompt**
 
 ```bash
-curl -X POST http://localhost:8000/v1/validate \
+curl -X POST http://localhost:8088/v1/validate \
   -H "Content-Type: application/json" \
   -d '{
     "content": "# Personality\nFriendly assistant.\n\n## Tone\nProfessional.\n\n## Behavior\nAnswer clearly.\n\n## Constraints\nNo medical advice."

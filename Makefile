@@ -32,8 +32,8 @@ format: ## Auto-format code with ruff
 type-check: ## Run mypy type checker
 	uv run mypy src
 
-run: ## Start dev server on port 8000 with hot-reload
-	uv run uvicorn cauldron.main:app --reload --host 0.0.0.0 --port 8000
+run: ## Start dev server on port 8088 with hot-reload
+	uv run uvicorn cauldron.main:app --reload --host 0.0.0.0 --port 8088
 
 docker-build: ## Build Docker image
 	docker compose build
