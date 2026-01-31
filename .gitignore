@@ -33,3 +33,7 @@ htmlcov/
 
 # uv
 uv.lock
+
+# secrets and environment variables
+.env
+.env.local

@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Changed
+
+- Switch env file from `.env` to `.env.local` for settings, docker-compose, and docs
+- Add `make help` as default target showing all available commands with descriptions
+
+### Added
+
+- `.dockerignore` to keep Docker build context minimal
+
 ## [0.1.0] - 2025-01-31
 
 ### Added

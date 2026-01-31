@@ -21,8 +21,8 @@ Receives markdown-formatted system prompts and validates them for:
 make dev
 
 # Copy and fill in your environment variables
-cp .env.example .env
-# Edit .env and set OPENROUTER_API_KEY
+cp .env.example .env.local
+# Edit .env.local and set OPENROUTER_API_KEY
 ```
 
 ## Usage
