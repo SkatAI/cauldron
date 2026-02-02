@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 from langchain_openai import ChatOpenAI
 
@@ -10,6 +11,14 @@ from cauldron.llm.prompts import moderation_prompt
 logger = logging.getLogger(__name__)
 
 
+def _extract_json(text: str) -> str:
+    """Strip markdown fences if present."""
+    match = re.search(r"```(?:json)?\s*(.*?)\s*```", text, re.DOTALL)
+    if match:
+        return match.group(1)
+    return text.strip()
+
+
 async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> ValidationState:
     """Use LLM to detect toxic or NSFW content."""
     content = state["content"]
@@ -18,7 +27,9 @@ async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> Valida
     try:
         chain = moderation_prompt | llm
         response = await chain.ainvoke({"content": content})
-        result = json.loads(str(response.content))
+        raw = str(response.content)
+        logger.debug("Moderation raw response: %s", raw)
+        result = json.loads(_extract_json(raw))
 
         for issue in result.get("issues", []):
             issue_type = issue.get("type", "toxic_content")
@@ -34,16 +45,16 @@ async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> Valida
                     detail=issue.get("description"),
                 )
             )
-    except json.JSONDecodeError:
-        logger.exception("Failed to parse moderation response")
+    except json.JSONDecodeError as exc:
+        logger.error("Failed to parse moderation response: %s — raw: %s", exc, raw)
         errors.append(
             ValidationError(
                 code=ErrorCode.INTERNAL_ERROR,
                 message="Failed to parse moderation response",
             )
         )
-    except Exception:
-        logger.exception("Moderation check failed")
+    except Exception as exc:
+        logger.error("Moderation check failed: %s", exc, exc_info=True)
         errors.append(
             ValidationError(
                 code=ErrorCode.INTERNAL_ERROR,

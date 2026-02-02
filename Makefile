@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install dev test test-unit test-integration test-cov lint format type-check run docker-build docker-up docker-down clean
+.PHONY: help install dev test test-unit test-integration test-cov lint format type-check run docker-build docker-up docker-logs docker-down clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -40,6 +40,9 @@ docker-build: ## Build Docker image
 
 docker-up: ## Start containers in background
 	docker compose up -d
+
+docker-logs: ## Tail container logs
+	docker compose logs -f
 
 docker-down: ## Stop containers
 	docker compose down

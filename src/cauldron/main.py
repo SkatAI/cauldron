@@ -12,9 +12,13 @@ from cauldron.llm.client import get_llm
 from cauldron.settings import settings
 
 
+logger = logging.getLogger(__name__)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     logging.basicConfig(level=settings.log_level.upper())
+    logger.info("Starting Cauldron with model=%s", settings.openrouter_model)
     sections_config = load_sections_config(settings.required_sections_path)
     llm = get_llm()
     app.state.graph = compile_graph(sections_config, llm)
