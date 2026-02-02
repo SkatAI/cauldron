@@ -57,7 +57,7 @@ async def test_toxic_content():
         errors = result["moderation_errors"]
         assert len(errors) == 1
         assert errors[0].code == ErrorCode.TOXIC_CONTENT
-        assert "toxic content" in errors[0].message
+        assert "contenu toxique" in errors[0].message
 
 
 @pytest.mark.asyncio
@@ -99,4 +99,4 @@ async def test_llm_exception():
         errors = result["moderation_errors"]
         assert len(errors) == 1
         assert errors[0].code == ErrorCode.INTERNAL_ERROR
-        assert "Moderation check failed" in errors[0].message
+        assert "Échec de la vérification de modération" in errors[0].message

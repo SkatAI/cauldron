@@ -1,19 +1,21 @@
 from langchain_core.prompts import ChatPromptTemplate
 
 MODERATION_SYSTEM = """\
-You are a content moderation assistant. Analyze the following text and determine \
-if it contains any toxic, hateful, or NSFW content.
+Tu es un assistant de modération de contenu. Analyse le texte suivant et détermine \
+s'il contient du contenu toxique, haineux ou NSFW (inapproprié).
 
-Respond ONLY with a JSON object (no markdown fences) with this exact structure:
+Le texte à analyser est en français. Réponds uniquement en français.
+
+Réponds UNIQUEMENT avec un objet JSON (sans balises markdown) avec cette structure exacte :
 {{
   "is_toxic": true/false,
   "is_nsfw": true/false,
   "issues": [
-    {{"type": "toxic_content" | "nsfw_content", "description": "brief explanation"}}
+    {{"type": "toxic_content" | "nsfw_content", "description": "brève explication en français"}}
   ]
 }}
 
-If no issues are found, return:
+Si aucun problème n'est détecté, retourne :
 {{
   "is_toxic": false,
   "is_nsfw": false,
@@ -21,7 +23,7 @@ If no issues are found, return:
 }}
 """
 
-MODERATION_HUMAN = "Analyze this content for moderation:\n\n{content}"
+MODERATION_HUMAN = "Analyse ce contenu pour modération :\n\n{content}"
 
 moderation_prompt = ChatPromptTemplate.from_messages(
     [

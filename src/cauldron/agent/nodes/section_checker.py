@@ -18,8 +18,8 @@ def check_sections(state: ValidationState, *, config: SectionsConfig) -> Validat
             errors.append(
                 ValidationError(
                     code=ErrorCode.MISSING_SECTION,
-                    message=f"Required section '{section.name}' is missing",
-                    detail=f"Expected heading matching pattern: {section.heading_pattern}",
+                    message=f"La section requise « {section.name} » est manquante",
+                    detail=f"En-tête attendu correspondant au motif : {section.heading_pattern}",
                 )
             )
 

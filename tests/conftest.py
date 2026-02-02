@@ -18,27 +18,50 @@ def sections_config() -> SectionsConfig:
 
 @pytest.fixture
 def valid_markdown() -> str:
-    return """# Personality
-You are a helpful assistant.
+    return """\
+# Simulation d'entretien sociologique - Persona Marie
 
-## Tone
-Friendly and professional.
+## Contexte de l'entretien
+Simulation d'une recherche sociologique.
 
-## Behavior
-Answer questions clearly.
+## PROFIL PERSONNEL
 
-## Constraints
-Do not provide medical advice.
+### Résumé du profil
+Étudiante en sociologie, curieuse et engagée.
+
+### Donneés sociodemographiques
+*   **Prénom** : Marie
+*   **âge** : 23
+
+### **PARCOURS ACADÉMIQUE**
+*   **Niveau d'études** : Master 2
+
+### Style de Langage et d'Expression
+*   **Niveau de Langage :** Courant
+
+### **Méthode de Réflexion et d'Argumentation**
+Raisonnement inductif.
+
+## Rapport avec l'intelligence Artificielle
+Description du rapport avec l'IA.
+
+## Instructions pour l'entretien
+Tu incarnes Marie lors d'un entretien sociologique.
 """
 
 
 @pytest.fixture
 def invalid_markdown_missing_sections() -> str:
-    return """# Personality
-You are a helpful assistant.
+    return """\
+# Simulation d'entretien sociologique - Persona Marie
 
-## Tone
-Friendly and professional.
+## Contexte de l'entretien
+Simulation d'une recherche sociologique.
+
+## PROFIL PERSONNEL
+
+### Résumé du profil
+Étudiante en sociologie.
 """
 
 

@@ -1,7 +1,45 @@
 sections:
-  - name: Personality
-    heading_pattern: "^#{1,3}\\s+Personality"
+  # Sections de niveau 2 (##)
+  - name: "Contexte de l'entretien"
+    heading_pattern: "(?i)^#{2,3}\\s+Contexte de l.entretien"
     required: true
-  - name: Tone
-    heading_pattern: "^#{1,3}\\s+Tone"
+  - name: "Profil personnel"
+    heading_pattern: "(?i)^#{2,3}\\s+Profil personnel"
     required: true
+  - name: "Rapport avec l'intelligence Artificielle"
+    heading_pattern: "(?i)^#{2,3}\\s+Rapport avec l.intelligence Artificielle"
+    required: true
+  - name: "Instructions pour l'entretien"
+    heading_pattern: "(?i)^#{2,3}\\s+Instructions pour l.entretien"
+    required: true
+
+  # Sections de niveau 3 (###) — sous Profil personnel
+  - name: "Résumé du profil"
+    heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*R[ée]sum[ée] du profil"
+    required: true
+  - name: "Données sociodemographiques"
+    heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*Donn[ée]{1,2}s sociod[ée]mographiques"
+    required: true
+  - name: "Parcours académique"
+    heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*Parcours acad[ée]mique"
+    required: true
+  - name: "Style de langage et d'expression"
+    heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*Style de langage"
+    required: true
+  - name: "Méthode de réflexion et d'argumentation"
+    heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*M[ée]thode de r[ée]flexion"
+    required: true
+
+  # Sections de niveau 3 (###) — sous Rapport avec l'IA
+  # - name: "Types d'usages académiques"
+  #   heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*Types d.usages acad[ée]miques"
+  #   required: true
+  # - name: "Perception de l'outil"
+  #   heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*Perception de l.outil"
+  #   required: true
+  # - name: "Rapport psychologique aux outils IA"
+  #   heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*Rapport psychologique"
+  #   required: true
+  # - name: "Projection et vision d'avenir"
+  #   heading_pattern: "(?i)^#{2,3}\\s+\\*{0,2}\\s*Projection et vision"
+  #   required: true

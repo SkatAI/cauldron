@@ -38,10 +38,14 @@ async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> Valida
             else:
                 code = ErrorCode.TOXIC_CONTENT
 
+            issue_label = (
+                "du contenu toxique" if issue_type == "toxic_content"
+                else "du contenu inapproprié (NSFW)"
+            )
             errors.append(
                 ValidationError(
                     code=code,
-                    message=f"Content contains {issue_type.replace('_', ' ')}",
+                    message=f"Le contenu contient {issue_label}",
                     detail=issue.get("description"),
                 )
             )
@@ -50,7 +54,7 @@ async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> Valida
         errors.append(
             ValidationError(
                 code=ErrorCode.INTERNAL_ERROR,
-                message="Failed to parse moderation response",
+                message="Échec de l'analyse de la réponse de modération",
             )
         )
     except Exception as exc:
@@ -58,7 +62,7 @@ async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> Valida
         errors.append(
             ValidationError(
                 code=ErrorCode.INTERNAL_ERROR,
-                message="Moderation check failed",
+                message="Échec de la vérification de modération",
             )
         )
 
