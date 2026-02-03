@@ -10,20 +10,20 @@ QUALITY_SYSTEM = """\
 {evaluator_instructions}
 
 Réponds UNIQUEMENT avec un objet JSON (sans balises markdown) avec cette structure exacte :
-{{
+{{{{
   "criteria": [
-    {{"name": "Clarté du rôle", "score": 1-5, "justification": "..."}},
-    {{"name": "Traits de comportement et attitude", "score": 1-5, "justification": "..."}},
-    {{"name": "Style de communication", "score": 1-5, "justification": "..."}},
-    {{"name": "Motivations et objectifs", "score": 1-5, "justification": "..."}},
-    {{"name": "Contraintes et limitations", "score": 1-5, "justification": "..."}},
-    {{"name": "Instructions de cohérence", "score": 1-5, "justification": "..."}},
-    {{"name": "Pertinence contextuelle", "score": 1-5, "justification": "..."}},
-    {{"name": "Clarté et concision", "score": 1-5, "justification": "..."}}
+    {{{{"name": "Clarté du rôle", "score": 1-5, "justification": "..."}}}},
+    {{{{"name": "Traits de comportement et attitude", "score": 1-5, "justification": "..."}}}},
+    {{{{"name": "Style de communication", "score": 1-5, "justification": "..."}}}},
+    {{{{"name": "Motivations et objectifs", "score": 1-5, "justification": "..."}}}},
+    {{{{"name": "Contraintes et limitations", "score": 1-5, "justification": "..."}}}},
+    {{{{"name": "Instructions de cohérence", "score": 1-5, "justification": "..."}}}},
+    {{{{"name": "Pertinence contextuelle", "score": 1-5, "justification": "..."}}}},
+    {{{{"name": "Clarté et concision", "score": 1-5, "justification": "..."}}}}
   ],
   "overall_score": 1-5,
   "advice": "Suggestions d'amélioration concrètes en français..."
-}}
+}}}}
 """
 
 QUALITY_HUMAN = "Évalue ce system prompt définissant un persona :\n\n{content}"
