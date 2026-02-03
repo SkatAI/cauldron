@@ -3,7 +3,10 @@ from pathlib import Path
 from langchain_core.prompts import ChatPromptTemplate
 
 _EVALUATOR_PROMPT_PATH = (
-    Path(__file__).parent.parent.parent.parent / "docs" / "system_prompt_quality_evaluator_fr.md"
+    Path(__file__).parent.parent.parent.parent
+    / "docs"
+    / "prompts"
+    / "system_prompt_quality_evaluator_fr.md"
 )
 
 QUALITY_SYSTEM = """\
