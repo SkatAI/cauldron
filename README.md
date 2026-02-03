@@ -4,9 +4,9 @@ AI agent service that validates AI persona system prompts. Built with FastAPI, L
 
 ## What it does
 
-Receives markdown-formatted system prompts and validates them for:
-- **Required sections** — configurable headings that must be present (Personality, Tone, Behavior, Constraints by default)
-- **Content moderation** — detects toxic and NSFW content via LLM
+Receives markdown-formatted system prompts and:
+- **Quality evaluation** — LLM-based assessment of persona quality across 8 criteria (role clarity, behavior traits, communication style, etc.) with scores and improvement advice in French
+- **Content moderation** — detects toxic and NSFW content via LLM (blocking validation)
 
 ## Prerequisites
 
@@ -56,20 +56,33 @@ curl -X POST http://localhost:8088/v1/validate \
 
 Response when valid:
 ```json
-{"status": "valid", "errors": []}
+{
+  "status": "valid",
+  "errors": [],
+  "quality": {
+    "criteria": [
+      {"name": "Clarté du rôle", "score": 4, "justification": "..."},
+      {"name": "Traits de comportement et attitude", "score": 3, "justification": "..."},
+      ...
+    ],
+    "overall_score": 4,
+    "advice": "Suggestions d'amélioration..."
+  }
+}
 ```
 
-Response when invalid:
+Response when invalid (toxic/NSFW content detected):
 ```json
 {
   "status": "invalid",
   "errors": [
-    {"code": "missing_section", "message": "Required section 'Tone' is missing", "detail": "..."}
-  ]
+    {"code": "toxic_content", "message": "Le contenu contient du contenu toxique", "detail": "..."}
+  ],
+  "quality": { ... }
 }
 ```
 
-Error codes: `missing_section`, `toxic_content`, `nsfw_content`, `parse_error`, `internal_error`.
+Error codes: `toxic_content`, `nsfw_content`, `parse_error`, `internal_error`.
 
 ### Docker
 
@@ -81,35 +94,21 @@ make docker-up
 make docker-down
 ```
 
-The `docker-compose.yaml` mounts `src/` and `config/` for hot-reload during development.
+The `docker-compose.yaml` mounts `src/` for hot-reload during development.
 
 ## Configuration
 
-### Environment variables (`.env`)
+### Environment variables (`.env.local`)
 
 | Variable | Description | Default |
 |---|---|---|
 | `OPENROUTER_API_KEY` | OpenRouter API key (required) | — |
-| `OPENROUTER_MODEL` | Model for moderation (required) | — |
+| `OPENROUTER_MODEL` | Model for moderation and quality evaluation (required) | — |
 | `OPENROUTER_BASE_URL` | OpenRouter API base URL | `https://openrouter.ai/api/v1` |
 | `LANGSMITH_API_KEY` | LangSmith tracing key (optional) | — |
 | `LANGSMITH_PROJECT` | LangSmith project name | `cauldron` |
 | `APP_ENV` | Environment name | `development` |
 | `LOG_LEVEL` | Logging level | `info` |
-| `REQUIRED_SECTIONS_PATH` | Path to sections config | `config/required_sections.yaml` |
-
-### Required sections (`config/required_sections.yaml`)
-
-Define which headings must appear in the markdown:
-
-```yaml
-sections:
-  - name: Personality
-    heading_pattern: "^#{1,3}\\s+Personality"
-    required: true
-```
-
-Each section has a `name`, a `heading_pattern` (regex matched against lines), and a `required` flag.
 
 ## Development
 
@@ -133,20 +132,20 @@ src/cauldron/
   api/                 # HTTP layer
     router.py          # /health
     v1/
-      schemas.py       # Request/response models
+      schemas.py       # Request/response models + QualityEvaluation
       endpoints/
         validation.py  # POST /v1/validate
   agent/               # LangGraph workflow
     state.py           # ValidationState TypedDict
     graph.py           # Graph definition + compilation
     nodes/
-      section_checker.py      # Regex-based heading validation
+      quality_evaluator.py    # LLM-based quality assessment
       content_moderator.py    # LLM-based moderation
-      result_aggregator.py    # Merges all errors
+      result_aggregator.py    # Aggregates moderation errors
   llm/
     client.py          # ChatOpenRouter (extends ChatOpenAI)
     prompts.py         # Moderation prompt template
-  config/
-    loader.py          # YAML config loader
-    sections.py        # SectionConfig pydantic model
+    quality_prompt.py  # Quality evaluation prompt template
+docs/
+  system_prompt_quality_evaluator_fr.md  # French evaluator instructions
 ```
