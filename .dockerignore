@@ -28,5 +28,7 @@ htmlcov/
 tests/
 docs/
 *.md
+!docs/prompts/
+!docs/prompts/*.md
 Makefile
 docker-compose.yaml

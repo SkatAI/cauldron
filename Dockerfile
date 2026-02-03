@@ -19,7 +19,7 @@ WORKDIR /app
 
 COPY --from=builder /app/.venv /app/.venv
 COPY src/ src/
-COPY config/ config/
+COPY docs/ docs/
 
 ENV PATH="/app/.venv/bin:$PATH"
 

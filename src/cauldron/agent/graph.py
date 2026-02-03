@@ -15,8 +15,16 @@ def _should_moderate(state: ValidationState) -> str:
     """Skip moderation if content is empty."""
     content = state.get("content", "")
     if not content or not content.strip():
-        return "aggregate_results"
+        return "evaluate_quality"
     return "moderate_content"
+
+
+def _should_evaluate_quality(state: ValidationState) -> str:
+    """Skip quality evaluation when moderation flags issues."""
+    moderation_errors = state.get("moderation_errors", [])
+    if moderation_errors:
+        return "aggregate_results"
+    return "evaluate_quality"
 
 
 def build_graph(llm: ChatOpenRouter) -> StateGraph[ValidationState]:
@@ -27,9 +35,9 @@ def build_graph(llm: ChatOpenRouter) -> StateGraph[ValidationState]:
     graph.add_node("moderate_content", partial(moderate_content, llm=llm))
     graph.add_node("aggregate_results", aggregate_results)
 
-    graph.add_edge(START, "evaluate_quality")
-    graph.add_conditional_edges("evaluate_quality", _should_moderate)
-    graph.add_edge("moderate_content", "aggregate_results")
+    graph.add_conditional_edges(START, _should_moderate)
+    graph.add_conditional_edges("moderate_content", _should_evaluate_quality)
+    graph.add_edge("evaluate_quality", "aggregate_results")
     graph.add_edge("aggregate_results", END)
 
     return graph
