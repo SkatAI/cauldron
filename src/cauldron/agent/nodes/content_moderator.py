@@ -39,7 +39,8 @@ async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> Valida
                 code = ErrorCode.TOXIC_CONTENT
 
             issue_label = (
-                "du contenu toxique" if issue_type == "toxic_content"
+                "du contenu toxique"
+                if issue_type == "toxic_content"
                 else "du contenu inapproprié (NSFW)"
             )
             errors.append(

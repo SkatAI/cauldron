@@ -1,6 +1,6 @@
 import pytest
 
-from cauldron.api.v1.schemas import ValidationError
+from cauldron.api.v1.schemas import QualityCriterion, QualityEvaluation, ValidationError
 
 
 @pytest.mark.integration
@@ -18,22 +18,42 @@ class TestValidationEndpoint:
         assert data["status"] == "valid"
         assert data["errors"] == []
 
-    def test_validate_invalid_content(self, test_client, mock_graph):
+    def test_validate_valid_content_with_quality(self, test_client, mock_graph, valid_markdown):
+        quality_eval = QualityEvaluation(
+            criteria=[
+                QualityCriterion(name="Clarté du rôle", score=4, justification="Bien défini"),
+            ],
+            overall_score=4,
+            advice="Continuer ainsi.",
+        )
+        mock_graph.ainvoke.return_value = {
+            "all_errors": [],
+            "quality_evaluation": quality_eval,
+        }
+        response = test_client.post("/v1/validate", json={"content": valid_markdown})
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "valid"
+        assert data["quality"] is not None
+        assert data["quality"]["overall_score"] == 4
+        assert len(data["quality"]["criteria"]) == 1
+
+    def test_validate_toxic_content(self, test_client, mock_graph):
         mock_graph.ainvoke.return_value = {
             "all_errors": [
                 ValidationError(
-                    code="missing_section",
-                    message="Required section 'Tone' is missing",
-                    detail=None,
+                    code="toxic_content",
+                    message="Le contenu contient du contenu toxique",
+                    detail="Hate speech detected",
                 )
             ]
         }
-        response = test_client.post("/v1/validate", json={"content": "# Personality\nSome text."})
+        response = test_client.post("/v1/validate", json={"content": "# Toxic content"})
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "invalid"
         assert len(data["errors"]) == 1
-        assert data["errors"][0]["code"] == "missing_section"
+        assert data["errors"][0]["code"] == "toxic_content"
 
     def test_validate_empty_content(self, test_client):
         response = test_client.post("/v1/validate", json={"content": ""})

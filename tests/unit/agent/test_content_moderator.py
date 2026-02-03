@@ -31,9 +31,7 @@ def _make_error_prompt(error: Exception):
 
 @pytest.mark.asyncio
 async def test_clean_content():
-    mock_prompt = _make_mock_prompt(
-        json.dumps({"is_toxic": False, "is_nsfw": False, "issues": []})
-    )
+    mock_prompt = _make_mock_prompt(json.dumps({"is_toxic": False, "is_nsfw": False, "issues": []}))
     with patch("cauldron.agent.nodes.content_moderator.moderation_prompt", mock_prompt):
         state = ValidationState(content="Hello, I am a friendly assistant.")
         result = await moderate_content(state, llm=MagicMock())

@@ -9,7 +9,6 @@ class ValidateRequest(BaseModel):
 
 
 class ErrorCode(str, Enum):
-    MISSING_SECTION = "missing_section"
     TOXIC_CONTENT = "toxic_content"
     NSFW_CONTENT = "nsfw_content"
     PARSE_ERROR = "parse_error"
@@ -22,6 +21,19 @@ class ValidationError(BaseModel):
     detail: str | None = None
 
 
+class QualityCriterion(BaseModel):
+    name: str
+    score: int = Field(..., ge=1, le=5)
+    justification: str
+
+
+class QualityEvaluation(BaseModel):
+    criteria: list[QualityCriterion]
+    overall_score: int = Field(..., ge=1, le=5)
+    advice: str
+
+
 class ValidateResponse(BaseModel):
     status: Literal["valid", "invalid"]
     errors: list[ValidationError] = Field(default_factory=list)
+    quality: QualityEvaluation | None = None

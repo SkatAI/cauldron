@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 @router.post("/validate", response_model=ValidateResponse)
-async def validate(request: Request, body: ValidateRequest):
+async def validate(request: Request, body: ValidateRequest) -> ValidateResponse:
     graph = request.app.state.graph
 
     try:
@@ -36,4 +36,5 @@ async def validate(request: Request, body: ValidateRequest):
     return ValidateResponse(
         status="invalid" if all_errors else "valid",
         errors=all_errors,
+        quality=result.get("quality_evaluation"),
     )

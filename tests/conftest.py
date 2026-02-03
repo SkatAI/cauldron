@@ -1,19 +1,9 @@
-from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
 
 from cauldron.api.v1.schemas import ValidateRequest
-from cauldron.config.loader import load_sections_config
-from cauldron.config.sections import SectionsConfig
-
-FIXTURES_DIR = Path(__file__).parent
-
-
-@pytest.fixture
-def sections_config() -> SectionsConfig:
-    return load_sections_config(Path(__file__).parent.parent / "config" / "required_sections.yaml")
 
 
 @pytest.fixture
@@ -47,21 +37,6 @@ Description du rapport avec l'IA.
 
 ## Instructions pour l'entretien
 Tu incarnes Marie lors d'un entretien sociologique.
-"""
-
-
-@pytest.fixture
-def invalid_markdown_missing_sections() -> str:
-    return """\
-# Simulation d'entretien sociologique - Persona Marie
-
-## Contexte de l'entretien
-Simulation d'une recherche sociologique.
-
-## PROFIL PERSONNEL
-
-### Résumé du profil
-Étudiante en sociologie.
 """
 
 
