@@ -1,11 +1,9 @@
-from pathlib import Path
-
 from langchain_core.prompts import ChatPromptTemplate
 
 from cauldron.llm.quality_prompt import (
+    _EVALUATOR_PROMPT_PATH,
     QUALITY_HUMAN,
     QUALITY_SYSTEM,
-    _EVALUATOR_PROMPT_PATH,
     get_quality_prompt,
     quality_prompt,
 )
@@ -33,7 +31,6 @@ def test_evaluator_prompt_contains_criteria():
 def test_quality_system_template_has_json_structure():
     """The system template should include JSON output format instructions."""
     assert '"criteria"' in QUALITY_SYSTEM
-    assert '"overall_score"' in QUALITY_SYSTEM
     assert '"advice"' in QUALITY_SYSTEM
     assert "Clarté du rôle" in QUALITY_SYSTEM
 

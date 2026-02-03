@@ -20,4 +20,4 @@ Contextual Relevance – Is the persona appropriate and well-aligned to the expe
 
 Conciseness and Efficiency – Is the prompt clear and specific without being unnecessarily verbose?
 
-Respond with a structured evaluation, giving a score (1–5) for each criterion, followed by a brief justification. At the end, provide an overall assessment and suggest specific improvements if needed.
+Respond with a structured evaluation, giving a brief justification for each criterion. At the end, suggest specific improvements if needed.

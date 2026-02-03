@@ -32,20 +32,18 @@ def _sample_quality_response():
     """Return a sample quality evaluation JSON response."""
     return {
         "criteria": [
-            {"name": "Clarté du rôle", "score": 4, "justification": "Bien défini"},
+            {"name": "Clarté du rôle", "justification": "Bien défini"},
             {
                 "name": "Traits de comportement et attitude",
-                "score": 3,
                 "justification": "Suffisant",
             },
-            {"name": "Style de communication", "score": 4, "justification": "Clair"},
-            {"name": "Motivations et objectifs", "score": 2, "justification": "À améliorer"},
-            {"name": "Contraintes et limitations", "score": 3, "justification": "Présentes"},
-            {"name": "Instructions de cohérence", "score": 4, "justification": "Explicites"},
-            {"name": "Pertinence contextuelle", "score": 5, "justification": "Parfait"},
-            {"name": "Clarté et concision", "score": 4, "justification": "Bon équilibre"},
+            {"name": "Style de communication", "justification": "Clair"},
+            {"name": "Motivations et objectifs", "justification": "À améliorer"},
+            {"name": "Contraintes et limitations", "justification": "Présentes"},
+            {"name": "Instructions de cohérence", "justification": "Explicites"},
+            {"name": "Pertinence contextuelle", "justification": "Parfait"},
+            {"name": "Clarté et concision", "justification": "Bon équilibre"},
         ],
-        "overall_score": 4,
         "advice": "Améliorer les motivations du persona.",
     }
 
@@ -58,7 +56,6 @@ async def test_quality_evaluation_success():
         result = await evaluate_quality(state, llm=MagicMock())
         quality = result["quality_evaluation"]
         assert quality is not None
-        assert quality.overall_score == 4
         assert len(quality.criteria) == 8
         assert quality.advice == "Améliorer les motivations du persona."
 
@@ -85,7 +82,6 @@ async def test_quality_evaluation_with_markdown_fences():
         result = await evaluate_quality(state, llm=MagicMock())
         quality = result["quality_evaluation"]
         assert quality is not None
-        assert quality.overall_score == 4
 
 
 @pytest.mark.asyncio
@@ -110,8 +106,7 @@ async def test_quality_evaluation_llm_exception():
 async def test_quality_evaluation_missing_fields():
     """Test handling of partial/missing fields in response."""
     partial_response = {
-        "criteria": [{"name": "Test", "score": 3, "justification": "OK"}],
-        "overall_score": 3,
+        "criteria": [{"name": "Test", "justification": "OK"}],
         # missing advice
     }
     mock_prompt = _make_mock_prompt(json.dumps(partial_response))

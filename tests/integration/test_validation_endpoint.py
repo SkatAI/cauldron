@@ -21,9 +21,8 @@ class TestValidationEndpoint:
     def test_validate_valid_content_with_quality(self, test_client, mock_graph, valid_markdown):
         quality_eval = QualityEvaluation(
             criteria=[
-                QualityCriterion(name="Clarté du rôle", score=4, justification="Bien défini"),
+                QualityCriterion(name="Clarté du rôle", justification="Bien défini"),
             ],
-            overall_score=4,
             advice="Continuer ainsi.",
         )
         mock_graph.ainvoke.return_value = {
@@ -35,7 +34,6 @@ class TestValidationEndpoint:
         data = response.json()
         assert data["status"] == "valid"
         assert data["quality"] is not None
-        assert data["quality"]["overall_score"] == 4
         assert len(data["quality"]["criteria"]) == 1
 
     def test_validate_toxic_content(self, test_client, mock_graph):

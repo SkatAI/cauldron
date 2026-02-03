@@ -33,16 +33,20 @@ async def evaluate_quality(state: ValidationState, *, llm: ChatOpenAI) -> Valida
         criteria = [
             QualityCriterion(
                 name=c["name"],
-                score=c["score"],
                 justification=c["justification"],
             )
             for c in result.get("criteria", [])
         ]
 
+        advice = result.get("advice", "")
+        if isinstance(advice, list):
+            advice = "\n".join(str(item) for item in advice)
+        elif advice is None:
+            advice = ""
+
         quality_evaluation = QualityEvaluation(
             criteria=criteria,
-            overall_score=result.get("overall_score", 1),
-            advice=result.get("advice", ""),
+            advice=str(advice),
         )
 
         return ValidationState(quality_evaluation=quality_evaluation)

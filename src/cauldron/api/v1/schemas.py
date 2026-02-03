@@ -23,13 +23,11 @@ class ValidationError(BaseModel):
 
 class QualityCriterion(BaseModel):
     name: str
-    score: int = Field(..., ge=1, le=5)
     justification: str
 
 
 class QualityEvaluation(BaseModel):
     criteria: list[QualityCriterion]
-    overall_score: int = Field(..., ge=1, le=5)
     advice: str
 
 

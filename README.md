@@ -5,7 +5,7 @@ AI agent service that validates AI persona system prompts. Built with FastAPI, L
 ## What it does
 
 Receives markdown-formatted system prompts and:
-- **Quality evaluation** — LLM-based assessment of persona quality across 8 criteria (role clarity, behavior traits, communication style, etc.) with scores and improvement advice in French
+- **Quality evaluation** — LLM-based assessment of persona quality across 8 criteria (role clarity, behavior traits, communication style, etc.) with improvement advice in French
 - **Content moderation** — detects toxic and NSFW content via LLM (blocking validation)
 
 ## Prerequisites
@@ -61,11 +61,10 @@ Response when valid:
   "errors": [],
   "quality": {
     "criteria": [
-      {"name": "Clarté du rôle", "score": 4, "justification": "..."},
-      {"name": "Traits de comportement et attitude", "score": 3, "justification": "..."},
+      {"name": "Clarté du rôle", "justification": "..."},
+      {"name": "Traits de comportement et attitude", "justification": "..."},
       ...
     ],
-    "overall_score": 4,
     "advice": "Suggestions d'amélioration..."
   }
 }
@@ -78,11 +77,19 @@ Response when invalid (toxic/NSFW content detected):
   "errors": [
     {"code": "toxic_content", "message": "Le contenu contient du contenu toxique", "detail": "..."}
   ],
-  "quality": { ... }
+  "quality": null
 }
 ```
 
 Error codes: `toxic_content`, `nsfw_content`, `parse_error`, `internal_error`.
+
+**Test with toxic content (fixture)**
+
+```bash
+curl -X POST http://localhost:8088/v1/validate \
+  -H "Content-Type: application/json" \
+  -d "$(jq -n --arg content "$(cat docs/prompts/tests/toxic_agent_system_prompt.md)" '{content: $content}')" | jq
+```
 
 ### Docker
 

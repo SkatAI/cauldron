@@ -12,15 +12,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Add `make help` as default target showing all available commands with descriptions
 - **Breaking**: Replace blocking section check with non-blocking LLM-based quality evaluation
 - Validation now only blocks on toxic/NSFW content; missing sections no longer cause `invalid` status
-- API response now includes `quality` field with detailed evaluation scores
+- API response now includes `quality` field with detailed evaluation advice
+- Skip quality evaluation when moderation flags toxic/NSFW content
 
 ### Added
 
 - `.dockerignore` to keep Docker build context minimal
 - `QualityEvaluation` and `QualityCriterion` response models
-- Quality evaluator node using French evaluator prompt (`docs/system_prompt_quality_evaluator_fr.md`)
+- Quality evaluator node using French evaluator prompt (`docs/prompts/system_prompt_quality_evaluator_fr.md`)
 - `quality_prompt.py` for LLM-based quality assessment
-- Quality evaluation returns 8 criteria scores (1-5), overall score, and improvement advice in French
+- Quality evaluation returns 8 criteria justifications and improvement advice in French
 
 ### Removed
 
@@ -28,6 +29,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - `config/required_sections.yaml` and related section config loading
 - `section_checker.py` node (replaced by `quality_evaluator.py`)
 - `REQUIRED_SECTIONS_PATH` environment variable
+- Quality scores (`score`, `overall_score`) from the API response
 
 ## [0.1.0] - 2025-01-31
 
