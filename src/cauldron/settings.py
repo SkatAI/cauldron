@@ -8,6 +8,7 @@ class Settings(BaseSettings):
 
     app_env: str = "development"
     log_level: str = "info"
+    bff_shared_secret: str = ""
 
     openrouter_api_key: str = ""
     openrouter_model: str

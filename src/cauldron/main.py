@@ -1,8 +1,10 @@
 import logging
+import secrets
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 from cauldron.agent.graph import compile_graph
 from cauldron.api.router import root_router
@@ -24,6 +26,19 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Cauldron", version="0.1.0", lifespan=lifespan)
+
+    @app.middleware("http")
+    async def require_bff_secret(request, call_next):
+        expected_secret = settings.bff_shared_secret.strip()
+        public_paths = {"/health", "/docs", "/redoc", "/openapi.json"}
+
+        if expected_secret and request.url.path not in public_paths:
+            provided_secret = request.headers.get("X-BFF-Secret", "")
+            if not secrets.compare_digest(provided_secret, expected_secret):
+                return JSONResponse(status_code=401, content={"detail": "Unauthorized"})
+
+        return await call_next(request)
+
     app.include_router(root_router)
     app.include_router(v1_router, prefix="/v1")
     return app

@@ -28,6 +28,7 @@ async def moderate_content(state: ValidationState, *, llm: ChatOpenAI) -> Valida
         chain = moderation_prompt | llm
         response = await chain.ainvoke({"content": content})
         raw = str(response.content)
+        logger.info("Moderation agent response: %s", raw)
         logger.debug("Moderation raw response: %s", raw)
         result = json.loads(_extract_json(raw))
 

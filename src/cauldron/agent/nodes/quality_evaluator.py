@@ -27,6 +27,7 @@ async def evaluate_quality(state: ValidationState, *, llm: ChatOpenAI) -> Valida
         chain = quality_prompt | llm
         response = await chain.ainvoke({"content": content})
         raw = str(response.content)
+        logger.info("Quality agent response: %s", raw)
         logger.debug("Quality evaluation raw response: %s", raw)
         result = json.loads(_extract_json(raw))
 
