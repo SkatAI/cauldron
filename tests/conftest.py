@@ -62,5 +62,13 @@ def test_client(mock_graph):
 
 
 @pytest.fixture
+def auth_headers() -> dict[str, str]:
+    from cauldron.main import settings
+
+    secret = settings.bff_shared_secret.strip()
+    return {"X-BFF-Secret": secret} if secret else {}
+
+
+@pytest.fixture
 def validate_request_valid(valid_markdown) -> ValidateRequest:
     return ValidateRequest(content=valid_markdown)
