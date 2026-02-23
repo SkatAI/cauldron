@@ -12,8 +12,16 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from checks.health import check_app_health
 from checks.supabase import check_supabase
 from alerts.telegram import format_alert_message, send_telegram_alert
+
+# Apps to health-check: (name, env var for URL)
+APPS = [
+    ("sociosim-bff", "https://sociosim-bff-avp2t.ondigitalocean.app"),
+    ("cauldron", "https://orca-app-dj9l6.ondigitalocean.app/docs"),
+    ("sociosim-adk-agent", "https://sociosim-adk-e4hi9.ondigitalocean.app/docs"),
+]
 
 
 def _load_env():
@@ -36,6 +44,9 @@ def run_checks() -> dict:
     """Run all enabled checks and return results dict."""
     results = {}
 
+    # App health checks
+    results["apps"] = [check_app_health(name, url) for name, url in APPS]
+
     # Supabase
     supabase_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
     supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
@@ -52,6 +63,12 @@ def log_results(results: dict):
     ts = _timestamp()
     print(f"{ts} Starting monitoring checks...")
 
+    for app in results.get("apps", []):
+        if app["status"] == "ok":
+            print(f"{ts} ✓ {app['name']} — OK ({app['response_time_ms']}ms)")
+        else:
+            print(f"{ts} ✗ {app['name']} — DOWN ({app.get('error', 'unknown')})")
+
     if "supabase" in results:
         r = results["supabase"]
         if r["status"] == "ok":
@@ -63,6 +80,9 @@ def log_results(results: dict):
 
 def needs_alert(results: dict) -> bool:
     """Return True if any check warrants a Telegram alert."""
+    for app in results.get("apps", []):
+        if app["status"] != "ok":
+            return True
     if "supabase" in results and results["supabase"]["status"] != "ok":
         return True
     return False
@@ -125,7 +145,7 @@ def main():
         send_alert(results)
 
     # Exit 1 if any check failed
-    any_failure = any(r.get("status") not in ("ok",) for r in results.values())
+    any_failure = needs_alert(results)
     print(f"{_timestamp()} Done.")
     sys.exit(1 if any_failure else 0)
 

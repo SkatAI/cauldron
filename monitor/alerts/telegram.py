@@ -41,6 +41,10 @@ def format_alert_message(results: dict) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     lines = [f"*SkatAI Monitor Alert*\n_{now}_\n"]
 
+    for app in results.get("apps", []):
+        if app["status"] != "ok":
+            lines.append(f"*{app['name']}*: DOWN — {app.get('error', 'unknown')}")
+
     if "supabase" in results:
         r = results["supabase"]
         if r["status"] != "ok":
