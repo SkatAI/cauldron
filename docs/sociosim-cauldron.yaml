@@ -1,0 +1,76 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+features:
+- buildpack-stack=ubuntu-22
+ingress:
+  rules:
+  - component:
+      name: cauldron
+    match:
+      authority:
+        exact: ""
+      path:
+        prefix: /
+name: sociosim-cauldron
+region: ams
+services:
+- dockerfile_path: /Dockerfile
+  envs:
+  - key: OPENROUTER_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:LhQehqFuoHVjCvmbSEPJooUTcPYtDKTE:/NQJ05hOgJKHd2sa9rZ+Ktp6FX1g5truvTC36mskYqmCBMflFyNPYaP4uK1aFZcYPZEFYEQCoTsgDCTepCMuYVE13+txQaYFF9nWBM3qQWNKE2vTBBra7Gs=]
+  - key: OPENROUTER_MODEL
+    scope: RUN_AND_BUILD_TIME
+    value: google/gemini-2.5-flash-lite
+  - key: LANGSMITH_TRACING
+    scope: RUN_AND_BUILD_TIME
+    value: "true"
+  - key: LANGSMITH_ENDPOINT
+    scope: RUN_AND_BUILD_TIME
+    value: https://api.smith.langchain.com
+  - key: LANGSMITH_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:Hs+RsgcWZztEJM+J+TH8h2pFQ6YPEI/s:8AadmfnmWvBzgDpbqh97HU7lmdGZTtkGIvGW0tulKA2WlqBMQ5Ct0YyolSDuerkM4skPZyNnhKtTNHIa7mnggbP2EA==]
+  - key: LANGSMITH_PROJECT
+    scope: RUN_AND_BUILD_TIME
+    value: Cauldron
+  - key: APP_ENV
+    scope: RUN_AND_BUILD_TIME
+    value: development
+  - key: LOG_LEVEL
+    scope: RUN_AND_BUILD_TIME
+    value: info
+  - key: BFF_SHARED_SECRET
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:UOy4EOYkVUtQDRdB2h3RHcbZiIOWokWJ:BwgImW72i3I3o8wcQzjX6PbsZzLVavm7naU02kncG22MvIG3UQNvqGZShbMRoFeuCxtT3/DjCEdvTvRezYBPSLRqtjyoGhxCoskRK1iAAaw=]
+  - key: TELEGRAM_BOT_TOKEN
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:h1FYpfpYgp/Dk8BSRDeG2oGMeESZsIKM:xEN8BiEswZdOguiXvnASjy1LaCq51k2OZgu99x6seyj2rF7KXvqGkDLerJCp051F26pRGih5hGSmqhnD9CY=]
+  - key: TELEGRAM_CHAT_ID
+    scope: RUN_AND_BUILD_TIME
+    value: "6928242404"
+  - key: NEXT_PUBLIC_SUPABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://aqfesmowrjjtdlmbipvq.supabase.co
+  - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:PY+Fs4dreyqblDF3Impk/iaScbm7Ydt1:8vK5Y3tJ93K8yLsTiRSgNfADIUEis2tcYhDWh4OHh+uMVv8y80dF0mml4UOPK+kOhJ4hrIDzBRchJxvIzPM=]
+  - key: SUPABASE_SERVICE_ROLE_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:N/Z/XxaaYgVrs0N47zR9b6/Di6x5dSGv:kGP3so0SElfjeV3rf1zJoLyADRXC7ylTul8HFKYmX/PJV+OH9VTpeKsV00gY8edoW37+MI9MWu4w]
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: SkatAI/cauldron
+  http_port: 8088
+  instance_count: 1
+  instance_size_slug: apps-s-1vcpu-0.5gb
+  name: cauldron
+  source_dir: /
