@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install dev test test-unit test-integration test-cov lint format type-check run docker-build docker-up docker-logs docker-down clean
+.PHONY: help install dev test test-unit test-integration test-cov lint format type-check run docker-build docker-up docker-logs docker-down monitor monitor-test-alert clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -46,6 +46,12 @@ docker-logs: ## Tail container logs
 
 docker-down: ## Stop containers
 	docker compose down
+
+monitor: ## Run monitoring checks (uses .env.local)
+	cd monitor && python monitor.py
+
+monitor-test-alert: ## Send a test Telegram alert
+	cd monitor && python monitor.py --test-alert
 
 clean: ## Remove build artifacts and caches
 	rm -rf .venv __pycache__ .pytest_cache .mypy_cache .ruff_cache htmlcov .coverage dist build *.egg-info
